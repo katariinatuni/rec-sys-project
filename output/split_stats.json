@@ -1,0 +1,89 @@
+{
+  "cuts": {
+    "val_start": "2001-01-01 00:00",
+    "test_start": "2001-07-01 00:00"
+  },
+  "periods": {
+    "train": {
+      "first": "2000-04-25 23:05",
+      "last": "2000-12-31 23:43",
+      "ratings": 904757,
+      "share_of_ratings": 0.9046,
+      "users": 6034
+    },
+    "val": {
+      "first": "2001-01-01 00:07",
+      "last": "2001-06-30 23:18",
+      "ratings": 47314,
+      "share_of_ratings": 0.0473,
+      "users": 926,
+      "users_without_earlier_ratings": 3,
+      "evaluated_users": 892,
+      "share_relevant": 0.5511,
+      "median_relevant_per_evaluated_user": 11.0,
+      "users_without_relevant_rating": 31,
+      "ratings_of_users_without_earlier_ratings": 168,
+      "items_in_fit_data": 3678,
+      "items_dropped": 305,
+      "share_of_items_dropped": 0.0829,
+      "fit_ratings_on_dropped_items": 612,
+      "share_of_fit_ratings_dropped": 0.0007,
+      "held_out_ratings_unreachable": 83,
+      "relevant_held_out_ratings_unreachable": 29,
+      "items_kept": 3373
+    },
+    "test": {
+      "first": "2001-07-01 01:20",
+      "last": "2003-02-28 17:49",
+      "ratings": 48138,
+      "share_of_ratings": 0.0481,
+      "users": 799,
+      "users_without_earlier_ratings": 3,
+      "evaluated_users": 777,
+      "share_relevant": 0.5368,
+      "median_relevant_per_evaluated_user": 18.0,
+      "users_without_relevant_rating": 19,
+      "ratings_of_users_without_earlier_ratings": 547,
+      "items_in_fit_data": 3688,
+      "items_dropped": 300,
+      "share_of_items_dropped": 0.0813,
+      "fit_ratings_on_dropped_items": 612,
+      "share_of_fit_ratings_dropped": 0.0006,
+      "held_out_ratings_unreachable": 192,
+      "relevant_held_out_ratings_unreachable": 105,
+      "items_kept": 3388
+    }
+  },
+  "section_1_2": {
+    "min_ratings_per_user": 20
+  },
+  "section_1_3": {
+    "share_80_10_10": {
+      "val_start": "2000-12-02 14:52",
+      "test_start": "2000-12-29 23:43",
+      "val": {
+        "ratings": 100024,
+        "evaluated_users": 492
+      },
+      "test": {
+        "ratings": 100021,
+        "evaluated_users": 1159
+      }
+    },
+    "users_first_rating_after_2000": 6,
+    "train_share_from_users_in_first_week": 0.9033,
+    "test_users": 799,
+    "test_users_also_rating_in_val": 548,
+    "users_rating_after_2000": 1177,
+    "share_of_users_rating_after_2000": 0.1949,
+    "median_ratings_in_2000": {
+      "users_rating_after_2000": 151.0,
+      "other_users": 77.0
+    },
+    "test_share_in_same_second_batches": 0.5077,
+    "top_1pct_films_share_of_ratings": {
+      "2000": 0.0911,
+      "test": 0.0503
+    }
+  }
+}
