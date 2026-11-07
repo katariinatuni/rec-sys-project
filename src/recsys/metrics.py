@@ -89,12 +89,15 @@ def catalogue_coverage(all_predictions, full_catalogue, k=10):
     # The number of recommendations for all films.
     return num_unique_recommended / num_total_items
 
-def evaluate(recs: pd.DataFrame, target: pd.DataFrame, users: pd.Index,
-             items: pd.Index, k: int = 10,
-             min_rating: int = RELEVANT_MIN_RATING) -> dict[str, float]:
+def ranked_lists(recs: pd.DataFrame) -> dict:
+    """Each user's recommended items as a list in rank order."""
+    return (recs.sort_values(["user_id", "rank"])
+                .groupby("user_id")["item_id"].apply(list).to_dict())
+
+def per_user_metrics(recs: pd.DataFrame, target: pd.DataFrame, users: pd.Index,
+                     k: int = 10, min_rating: int = RELEVANT_MIN_RATING) -> pd.DataFrame:
     """
-    Mean Precision@k, Recall@k and NDCG@k over the evaluated users, plus catalogue coverage.
-    Recs has the columns user_id, item_id and rank, as every model returns them.
+    Precision@k, Recall@k and NDCG@k for every evaluated user, one row per user.
     Ground truth is the user's held-out ratings of min_rating or more, the same rule
     evaluated_users() uses. A user with no recommendations scores 0 instead of being
     left out, so a model cannot look better by skipping users.
@@ -102,24 +105,30 @@ def evaluate(recs: pd.DataFrame, target: pd.DataFrame, users: pd.Index,
     # Relevant held-out ratings, grouped into one set of movies per user.
     relevant = target[target["rating"] >= min_rating]
     ground_truth = relevant.groupby("user_id")["item_id"].apply(set).to_dict()
-    # Each user's recommendations as a list in rank order.
-    predictions = (recs.sort_values(["user_id", "rank"])
-                       .groupby("user_id")["item_id"].apply(list).to_dict())
+    predictions = ranked_lists(recs)
 
-    precisions, recalls, ndcgs = [], [], []
+    rows = []
     for user in users:
         user_preds = predictions.get(user, [])
         user_truth = ground_truth.get(user, set())
-        precisions.append(precision_at_k(user_preds, user_truth, k))
-        recalls.append(recall_at_k(user_preds, user_truth, k))
-        ndcgs.append(ndcg_at_k(user_preds, user_truth, k))
+        rows.append({
+            f"Precision@{k}": precision_at_k(user_preds, user_truth, k),
+            f"Recall@{k}": recall_at_k(user_preds, user_truth, k),
+            f"NDCG@{k}": ndcg_at_k(user_preds, user_truth, k),
+        })
+    return pd.DataFrame(rows, index=users)
 
-    return {
-        f"Precision@{k}": float(np.mean(precisions)),
-        f"Recall@{k}": float(np.mean(recalls)),
-        f"NDCG@{k}": float(np.mean(ndcgs)),
-        "Coverage": catalogue_coverage(list(predictions.values()), items, k),
-    }
+def evaluate(recs: pd.DataFrame, target: pd.DataFrame, users: pd.Index,
+             items: pd.Index, k: int = 10,
+             min_rating: int = RELEVANT_MIN_RATING) -> dict[str, float]:
+    """
+    Mean Precision@k, Recall@k and NDCG@k over the evaluated users, plus catalogue coverage.
+    Recs has the columns user_id, item_id and rank, as every model returns them.
+    """
+    results = {name: float(value)
+               for name, value in per_user_metrics(recs, target, users, k, min_rating).mean().items()}
+    results["Coverage"] = catalogue_coverage(list(ranked_lists(recs).values()), items, k)
+    return results
 
 def print_results(name: str, results: dict[str, float]) -> None:
     """Prints one model's results, one metric per line."""
