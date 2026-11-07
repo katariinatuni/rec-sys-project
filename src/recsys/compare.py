@@ -5,10 +5,12 @@ paired-bootstrap interval over users.
 
 Run from the repository root (about 10 seconds):
     PYTHONPATH=src python -m recsys.compare --data-dir ../data/ml-1m
-Options: --period val|test (default val; run test only once, after the choices are fixed)
-and --resamples N (default 5000)."""
+Options: --period val|test (default val; run test only once, after the choices are fixed),
+--resamples N (default 5000) and --out-dir (default output; the table is also saved there
+as compare_<period>.csv)."""
 
 import argparse
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -41,6 +43,7 @@ def main() -> None:
     parser.add_argument("--data-dir", required=True)
     parser.add_argument("--period", default="val", choices=["val", "test"])
     parser.add_argument("--resamples", type=int, default=5000)
+    parser.add_argument("--out-dir", default="output")
     args = parser.parse_args()
 
     ratings = load_ratings(args.data_dir)
@@ -50,8 +53,8 @@ def main() -> None:
     items = kept_items(fit)
 
     # Every variant: (model, setting, counting, recommendations).
-    variants = [("Item kNN", f"k = {k}", "star ratings", recommend(fit, items, users, k=k))
-                for k in KNN_K]
+    variants = [("Item kNN", f"{sim}, k = {k}", "star ratings", recommend(fit, items, users, k=k, similarity=sim))
+                for sim in ["adjusted_cosine", "cosine"] for k in KNN_K]
     for window_days in WINDOWS_DAYS:
         for min_rating in [None, RELEVANT_MIN_RATING]:
             variants.append(("Popular",
@@ -74,7 +77,10 @@ def main() -> None:
 
     print(f"{args.period}: {len(users)} users, best = "
           f"{rows[best]['model']} {rows[best]['setting']} {rows[best]['counting']}")
-    print(pd.DataFrame(rows).to_string(index=False, float_format="%.4f"))
+    table = pd.DataFrame(rows)
+    print(table.to_string(index=False, float_format="%.4f"))
+    Path(args.out_dir).mkdir(parents=True, exist_ok=True)
+    table.to_csv(Path(args.out_dir) / f"compare_{args.period}.csv", index=False)  # read by results.py
 
 
 if __name__ == "__main__":
