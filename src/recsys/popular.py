@@ -2,12 +2,18 @@
 Returns a DataFrame with columns user_id, item_id, rank (1 = best) and score.
 Items the user has already rated are not recommended."""
 
+import argparse
+
 import pandas as pd
+
+from recsys.data import load_ratings
+from recsys.metrics import evaluate, print_results
+from recsys.split import temporal_split, fit_and_target, evaluated_users, kept_items
 
 SECONDS_PER_DAY = 24 * 60 * 60  # timestamps are unix seconds
 
 def popular(fit: pd.DataFrame, items: pd.Index, users: pd.Index,
-            n: int = 10, window_days: int = None) -> pd.DataFrame:
+            n: int = 10, window_days: int | None = None) -> pd.DataFrame:
 
     data = fit[fit["item_id"].isin(items)]  # only items from the items-list are selected
 
@@ -31,4 +37,27 @@ def popular(fit: pd.DataFrame, items: pd.Index, users: pd.Index,
             rows.append({"user_id": user, "item_id": item_id, "rank": rank, "score": score})
 
     return pd.DataFrame(rows)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data-dir", required=True)
+    parser.add_argument("--period", default="val", choices=["val", "test"])
+    args = parser.parse_args()
+
+    ratings = load_ratings(args.data_dir)
+    split = temporal_split(ratings)
+    fit, target = fit_and_target(split, args.period)
+    users = evaluated_users(fit, target)
+    items = kept_items(fit)
+
+    # Variant 1: all-time popularity. Variant 2: popularity in the last 30 days of fit.
+    for name, window_days in [("All-time popularity", None),
+                              ("Recent window (30 days)", 30)]:
+        recs = popular(fit, items, users, n=10, window_days=window_days)
+        print_results(name, evaluate(recs, target, users, items, k=10))
+
+
+if __name__ == "__main__":
+    main()
 

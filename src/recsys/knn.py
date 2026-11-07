@@ -2,10 +2,17 @@
 Returns a dataFrame with columns user_id, item_id, rank (1 = best) and score.
 Items the user has already rated are not recommended."""
 
+import argparse
+
 from scipy.sparse import csr_matrix
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+
+from recsys.data import load_ratings
+from recsys.metrics import evaluate, print_results
+from recsys.split import (temporal_split, fit_and_target,
+                          evaluated_users, kept_items)
 
 def recommend(fit: pd.DataFrame, items: pd.Index, users: pd.Index,
               k: int = 50, n: int = 10) -> pd.DataFrame: 
@@ -43,21 +50,14 @@ def recommend(fit: pd.DataFrame, items: pd.Index, users: pd.Index,
         if user not in recommendation_df.index:    
             continue
         user_series = recommendation_df.loc[user].sort_values(ascending=False, kind="stable")
-        top_10 = user_series.head(n)
+        top_n = user_series.head(n)
 
-        for rank, (item_id, score) in enumerate(top_10.items(), start=1):
+        for rank, (item_id, score) in enumerate(top_n.items(), start=1):
             rows.append({"user_id": user, "item_id": item_id, "rank": rank, "score": score})
 
     results_df = pd.DataFrame(rows)
 
     return results_df
-
-
-import argparse
-
-from recsys.data import load_ratings
-from recsys.split import (temporal_split, fit_and_target,
-                          evaluated_users, kept_items)
 
 
 def main() -> None:
@@ -73,11 +73,8 @@ def main() -> None:
     users = evaluated_users(fit, target)
     items = kept_items(fit)
 
-    recs = recommend(fit, items, users, k=args.k)
-    recs = recommend(fit, items, users, k=50)
-    print(recs.shape)                               # (8920, 4)
-    print(recs["item_id"].nunique() / len(items))   # 0.166...
-    print(recommend(fit, items, users, k=50, n=5).shape)   # (4460, 4)
+    recs = recommend(fit, items, users, k=args.k, n=10)
+    print_results(f"Item kNN (k={args.k})", evaluate(recs, target, users, items, k=10))
 
 
 if __name__ == "__main__":
