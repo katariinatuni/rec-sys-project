@@ -1,4 +1,7 @@
 import numpy as np
+import pandas as pd
+
+from recsys.split import RELEVANT_MIN_RATING
 
 def precision_at_k(predictions, ground_truth, k=10):
     """
@@ -68,7 +71,7 @@ def catalogue_coverage(all_predictions, full_catalogue, k=10):
     All predictions is a list containing the Top-K recommendations for all users.
     Full catalogue is a list of all unique movies in the system.
     """
-    # Collets all unique movies that are recommended.
+    # Collects all unique movies that are recommended.
     recommended_items = set()
     # Go through the recommendations for all users.
     for preds in all_predictions:
@@ -85,3 +88,41 @@ def catalogue_coverage(all_predictions, full_catalogue, k=10):
         return 0.0
     # The number of recommendations for all films.
     return num_unique_recommended / num_total_items
+
+def evaluate(recs: pd.DataFrame, target: pd.DataFrame, users: pd.Index,
+             items: pd.Index, k: int = 10,
+             min_rating: int = RELEVANT_MIN_RATING) -> dict[str, float]:
+    """
+    Mean Precision@k, Recall@k and NDCG@k over the evaluated users, plus catalogue coverage.
+    Recs has the columns user_id, item_id and rank, as every model returns them.
+    Ground truth is the user's held-out ratings of min_rating or more, the same rule
+    evaluated_users() uses. A user with no recommendations scores 0 instead of being
+    left out, so a model cannot look better by skipping users.
+    """
+    # Relevant held-out ratings, grouped into one set of movies per user.
+    relevant = target[target["rating"] >= min_rating]
+    ground_truth = relevant.groupby("user_id")["item_id"].apply(set).to_dict()
+    # Each user's recommendations as a list in rank order.
+    predictions = (recs.sort_values(["user_id", "rank"])
+                       .groupby("user_id")["item_id"].apply(list).to_dict())
+
+    precisions, recalls, ndcgs = [], [], []
+    for user in users:
+        user_preds = predictions.get(user, [])
+        user_truth = ground_truth.get(user, set())
+        precisions.append(precision_at_k(user_preds, user_truth, k))
+        recalls.append(recall_at_k(user_preds, user_truth, k))
+        ndcgs.append(ndcg_at_k(user_preds, user_truth, k))
+
+    return {
+        f"Precision@{k}": float(np.mean(precisions)),
+        f"Recall@{k}": float(np.mean(recalls)),
+        f"NDCG@{k}": float(np.mean(ndcgs)),
+        "Coverage": catalogue_coverage(list(predictions.values()), items, k),
+    }
+
+def print_results(name: str, results: dict[str, float]) -> None:
+    """Prints one model's results, one metric per line."""
+    print(name)
+    for metric, value in results.items():
+        print(f"  {metric:<13} {value:.4f}")
