@@ -1,0 +1,227 @@
+{
+  "data": {
+    "n_ratings": 1000209,
+    "n_users": 6040,
+    "n_items_rated": 3706,
+    "n_items_in_movies_dat": 3883,
+    "density": 0.0447,
+    "first_rating": "2000-04-25",
+    "last_rating": "2003-02-28",
+    "ratings_per_user": {
+      "count": 6040.0,
+      "mean": 165.6,
+      "std": 192.7,
+      "min": 20.0,
+      "25%": 44.0,
+      "50%": 96.0,
+      "75%": 208.0,
+      "max": 2314.0
+    },
+    "ratings_per_item": {
+      "count": 3706.0,
+      "mean": 269.9,
+      "std": 384.0,
+      "min": 1.0,
+      "25%": 33.0,
+      "50%": 123.5,
+      "75%": 350.0,
+      "max": 3428.0
+    },
+    "rating_share": {
+      "1": 0.0562,
+      "2": 0.1075,
+      "3": 0.2611,
+      "4": 0.3489,
+      "5": 0.2263
+    },
+    "share_4_or_more": 0.5752
+  },
+  "long_tail": {
+    "items": {
+      "top_1pct_share": 0.0873,
+      "top_10pct_share": 0.4445,
+      "top_20pct_share": 0.6516,
+      "bottom_50pct_share": 0.0763,
+      "gini": 0.6336
+    },
+    "users": {
+      "top_1pct_share": 0.0689,
+      "top_10pct_share": 0.3809,
+      "top_20pct_share": 0.5719,
+      "bottom_50pct_share": 0.1456,
+      "gini": 0.5286
+    }
+  },
+  "activity": {
+    "days_until_share": {
+      "50%": 188,
+      "80%": 220,
+      "90%": 248
+    },
+    "spike_weeks": {
+      "2000-07-03": {
+        "ratings": 37390,
+        "share_from_users_in_first_week": 0.956,
+        "film_mix_correlation_with_other_2000_weeks": 0.954
+      },
+      "2000-07-31": {
+        "ratings": 78910,
+        "share_from_users_in_first_week": 0.984,
+        "film_mix_correlation_with_other_2000_weeks": 0.958
+      },
+      "2000-11-20": {
+        "ratings": 162501,
+        "share_from_users_in_first_week": 0.986,
+        "film_mix_correlation_with_other_2000_weeks": 0.976
+      }
+    },
+    "users_first_rating_after_2000": 6
+  },
+  "user_start": {
+    "share_of_ratings_within": {
+      "1 hour": 0.5201,
+      "24 hours": 0.7236,
+      "7 days": 0.8181
+    },
+    "first_hour_ratings_per_user": {
+      "mean": 86.1,
+      "median": 59.0
+    },
+    "users_with_20_in_first_hour": 5447,
+    "users_only_active_in_first_week": 4243
+  },
+  "batches": {
+    "share_of_ratings_in_batches": 0.7739,
+    "share_of_first_hour_ratings_in_batches": 0.8241,
+    "batches_by_size": {
+      "1": 226181,
+      "2": 110199,
+      "3": 62860,
+      "4": 34081,
+      "5": 18354,
+      "6": 9656,
+      "7": 5013,
+      "8": 2458,
+      "9": 1232,
+      "10": 661,
+      "11": 106,
+      "12": 83,
+      "13": 85,
+      "14": 48,
+      "15": 38,
+      "16": 29,
+      "17": 16,
+      "18": 13,
+      "19": 9,
+      "20": 14,
+      "21": 6,
+      "22": 7,
+      "23": 5,
+      "25": 2,
+      "26": 2,
+      "27": 2,
+      "28": 2,
+      "30": 1
+    },
+    "count_ratio_to_next_size": {
+      "1": 2.1,
+      "2": 1.8,
+      "3": 1.8,
+      "4": 1.9,
+      "5": 1.9,
+      "6": 1.9,
+      "7": 2.0,
+      "8": 2.0,
+      "9": 1.9,
+      "10": 6.2,
+      "11": 1.3
+    },
+    "mean_stars_by_batch_size": {
+      "1": 3.59,
+      "2": 3.59,
+      "3": 3.6,
+      "4": 3.59,
+      "5": 3.58,
+      "6": 3.58,
+      "7": 3.56,
+      "8": 3.52,
+      "9": 3.49,
+      "10": 3.13,
+      "11+": 3.49
+    },
+    "share_of_gaps_within_session": 0.952,
+    "page_time_seconds_by_batch_size": {
+      "1": {
+        "batches": 206554,
+        "p25": 18.0,
+        "median": 28.0,
+        "p75": 54.0
+      },
+      "2": {
+        "batches": 106005,
+        "p25": 21.0,
+        "median": 29.0,
+        "p75": 47.0
+      },
+      "3": {
+        "batches": 60719,
+        "p25": 23.0,
+        "median": 31.0,
+        "p75": 48.0
+      },
+      "4": {
+        "batches": 32934,
+        "p25": 26.0,
+        "median": 34.0,
+        "p75": 51.0
+      },
+      "5": {
+        "batches": 17692,
+        "p25": 29.0,
+        "median": 37.0,
+        "p75": 55.0
+      },
+      "6": {
+        "batches": 9385,
+        "p25": 32.0,
+        "median": 41.0,
+        "p75": 61.0
+      },
+      "7": {
+        "batches": 4876,
+        "p25": 34.0,
+        "median": 44.0,
+        "p75": 67.0
+      },
+      "8": {
+        "batches": 2366,
+        "p25": 37.0,
+        "median": 48.0,
+        "p75": 73.0
+      },
+      "9": {
+        "batches": 1184,
+        "p25": 40.0,
+        "median": 54.0,
+        "p75": 85.0
+      },
+      "10": {
+        "batches": 636,
+        "p25": 40.0,
+        "median": 59.0,
+        "p75": 94.25
+      },
+      "11+": {
+        "batches": 433,
+        "p25": 83.0,
+        "median": 109.0,
+        "p75": 147.0
+      }
+    },
+    "page_time_fit": {
+      "fixed_seconds": 21.4,
+      "seconds_per_rated_film": 3.5,
+      "fitted_on": "median time on page for 1-10 ratings"
+    }
+  }
+}

@@ -1,2 +1,116 @@
 # rec-sys-project
-Recommender systems project work in group
+
+Course project for DATA.ML.360 Recommender Systems (Tampere University): building, evaluating and critiquing recommenders on MovieLens 1M.
+
+## 1. Get the data
+
+The dataset is **not** included in this repository: the MovieLens licence does not allow redistributing it.
+
+1. Download `ml-1m.zip` from GroupLens: <https://grouplens.org/datasets/movielens/1m/>
+2. Check that it is the same file we used. The SHA-256 must be
+   `a6898adb50b9ca05aa231689da44c217cb524e7ebd39d264c56e2832f2c54e20`
+3. Unzip it **next to** this repository, so the folders look like this:
+
+   ```
+   any-folder/
+   ├── data/
+   │   └── ml-1m/          ratings.dat, movies.dat, users.dat, README
+   └── rec-sys-project/    this repository
+   ```
+
+   Any other location works too: pass its path with `--data-dir`.
+
+## 2. Install
+
+Requires **Python 3.12**. All dependencies are pinned in `requirements.txt`.
+
+With plain pip, if Python 3.12 is already installed:
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+## 3. Run
+
+From the repository root, one command reproduces every Part 1 number, table and figure in about 40 seconds:
+
+```bash
+python run_all.py --data-dir ../data/ml-1m
+```
+
+It runs the steps below in order. Each step can also be run on its own, and every command takes `--out-dir` to write the outputs somewhere else.
+
+Random seed: the models are deterministic. The only random step is the bootstrap in `compare.py`, which uses seed 0 for every comparison.
+
+### Data characterization (report section 1.1)
+
+```bash
+PYTHONPATH=src python -m recsys.explore --data-dir ../data/ml-1m
+```
+
+This reproduces every Part 1 data-characterization number and figure in about 15 seconds:
+
+| Output | Contents |
+|---|---|
+| `output/data_stats.json` | all numbers: counts, density, distributions, long tail, activity spikes, sign-up and batch analysis |
+| `output/figures/activity_over_time.png` | ratings per week (first-week vs returning users) and cumulative share |
+| `output/figures/long_tail_rank_frequency.png` | ratings per film and per user, ranked, log-log |
+| `output/figures/rating_distribution.png` | share of ratings at each star value |
+| `output/figures/page_time_by_batch_size.png` | time on a rating page against films rated on it |
+| `output/figures/stars_by_batch_size.png` | mean stars by number of films rated in the same second |
+
+### Preprocessing and temporal split (report sections 1.2 and 1.3)
+
+```bash
+PYTHONPATH=src python -m recsys.split_stats --data-dir ../data/ml-1m
+```
+
+This splits the ratings by time and reproduces every number and table in sections 1.2 and 1.3 in about 2 seconds:
+
+| Output | Contents |
+|---|---|
+| `output/split_stats.json` | all numbers: split periods, relevance threshold, item filter, 80/10/10 comparison, post-2000 users |
+| `output/report_tables.html` | Table 1 (thresholds) and Table 2 (split); open in a browser and copy into Word |
+| `output/report_tables.md` | the same two tables as Markdown |
+
+The split cuts at 00:00 UTC on 1 Jan 2001 and 1 Jul 2001:
+
+| Set | Ratings | Used for |
+|---|---|---|
+| Train | before 1 Jan 2001 | fitting models for validation |
+| Validation | 1 Jan – 30 Jun 2001 | choosing hyperparameters |
+| Test | from 1 Jul 2001 | final evaluation, with models refitted on train and validation |
+
+### Baselines and results
+
+```bash
+PYTHONPATH=src python -m recsys.compare --data-dir ../data/ml-1m --period val
+PYTHONPATH=src python -m recsys.compare --data-dir ../data/ml-1m --period test
+PYTHONPATH=src python -m recsys.results
+```
+
+This evaluates every baseline variant on validation and on test, and writes the results in the course results template's columns:
+
+| Output | Contents |
+|---|---|
+| `output/compare_val.csv`, `output/compare_test.csv` | every variant: item kNN (adjusted cosine and cosine, k = 20, 30, 50) and most popular (all-time or a 7 / 14 / 30 / 60-day window, all ratings or ratings ≥ 4); Precision@10, Recall@10, NDCG@10, coverage, and the NDCG difference to the best variant with a 95% paired-bootstrap interval |
+| `output/results.csv` | the same results in the results template's columns, with the variant of each baseline chosen on validation marked |
+
+## Repository layout
+
+```
+run_all.py          runs every step above in order
+src/recsys/
+├── data.py         loads ratings.dat, movies.dat and users.dat
+├── explore.py      Part 1 data characterization (report section 1.1)
+├── split.py        temporal split, evaluated users and item filter (sections 1.2-1.3)
+├── split_stats.py  numbers and tables for sections 1.2-1.3
+├── metrics.py      Precision@10, Recall@10, NDCG@10 and catalogue coverage
+├── knn.py          item-based kNN baseline
+├── popular.py      most-popular baseline
+├── compare.py      evaluates every baseline variant on one period
+└── results.py      writes results.csv in the results template's columns
+output/             generated by the commands above
+```

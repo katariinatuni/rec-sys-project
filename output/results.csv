@@ -1,0 +1,33 @@
+Sheet,Period,Model,Variant / settings,Similarity,k,Precision@10,Recall@10,NDCG@10,Catalogue coverage,Seed,Notes,NDCG@10 vs best in period,CI low,CI high
+Part 1 - Baselines,validation,Item-based kNN,ratings minus each user's mean; sum over the item's k neighbours,adjusted cosine,20,0.132,0.0693,0.1525,0.1874,none (deterministic); bootstrap seed 0,,-0.0148,-0.0267,-0.003
+Part 1 - Baselines,validation,Item-based kNN,ratings minus each user's mean; sum over the item's k neighbours,adjusted cosine,30,0.1391,0.0689,0.1592,0.1755,none (deterministic); bootstrap seed 0,chosen on validation,-0.0081,-0.0207,0.0044
+Part 1 - Baselines,validation,Item-based kNN,ratings minus each user's mean; sum over the item's k neighbours,adjusted cosine,50,0.1392,0.064,0.1581,0.1663,none (deterministic); bootstrap seed 0,,-0.0092,-0.0216,0.0033
+Part 1 - Baselines,validation,Item-based kNN,raw ratings; sum over the item's k neighbours,cosine,20,0.1129,0.0612,0.132,0.2114,none (deterministic); bootstrap seed 0,,-0.0353,-0.0485,-0.0224
+Part 1 - Baselines,validation,Item-based kNN,raw ratings; sum over the item's k neighbours,cosine,30,0.112,0.0596,0.1299,0.2105,none (deterministic); bootstrap seed 0,,-0.0375,-0.0504,-0.0248
+Part 1 - Baselines,validation,Item-based kNN,raw ratings; sum over the item's k neighbours,cosine,50,0.1159,0.0632,0.1365,0.2049,none (deterministic); bootstrap seed 0,,-0.0308,-0.0439,-0.0175
+Part 1 - Baselines,validation,Most popular,"all-time, all ratings",-,-,0.1217,0.049,0.1351,0.043,none (deterministic); bootstrap seed 0,,-0.0323,-0.0405,-0.0244
+Part 1 - Baselines,validation,Most popular,"all-time, ratings >= 4",-,-,0.1269,0.0553,0.1439,0.0415,none (deterministic); bootstrap seed 0,,-0.0235,-0.0315,-0.0158
+Part 1 - Baselines,validation,Most popular,"7 days, all ratings",-,-,0.1275,0.0725,0.1576,0.032,none (deterministic); bootstrap seed 0,,-0.0097,-0.0144,-0.005
+Part 1 - Baselines,validation,Most popular,"7 days, ratings >= 4",-,-,0.1342,0.0756,0.1651,0.0338,none (deterministic); bootstrap seed 0,,-0.0022,-0.0061,0.0017
+Part 1 - Baselines,validation,Most popular,"14 days, all ratings",-,-,0.1306,0.0769,0.1552,0.0359,none (deterministic); bootstrap seed 0,,-0.0121,-0.0166,-0.0074
+Part 1 - Baselines,validation,Most popular,"14 days, ratings >= 4",-,-,0.1373,0.0753,0.1673,0.0365,none (deterministic); bootstrap seed 0,chosen on validation,0.0,0.0,0.0
+Part 1 - Baselines,validation,Most popular,"30 days, all ratings",-,-,0.1314,0.0716,0.1552,0.0379,none (deterministic); bootstrap seed 0,,-0.0121,-0.0171,-0.007
+Part 1 - Baselines,validation,Most popular,"30 days, ratings >= 4",-,-,0.1354,0.071,0.1607,0.0379,none (deterministic); bootstrap seed 0,,-0.0066,-0.0111,-0.0024
+Part 1 - Baselines,validation,Most popular,"60 days, all ratings",-,-,0.1266,0.0564,0.1387,0.0374,none (deterministic); bootstrap seed 0,,-0.0286,-0.0365,-0.0209
+Part 1 - Baselines,validation,Most popular,"60 days, ratings >= 4",-,-,0.1295,0.0586,0.1451,0.0388,none (deterministic); bootstrap seed 0,,-0.0223,-0.03,-0.0149
+Part 1 - Baselines,test,Item-based kNN,ratings minus each user's mean; sum over the item's k neighbours,adjusted cosine,20,0.1691,0.0767,0.1894,0.1582,none (deterministic); bootstrap seed 0,,-0.0091,-0.0164,-0.0016
+Part 1 - Baselines,test,Item-based kNN,ratings minus each user's mean; sum over the item's k neighbours,adjusted cosine,30,0.1716,0.0757,0.1929,0.1502,none (deterministic); bootstrap seed 0,chosen on validation,-0.0056,-0.0116,0.0005
+Part 1 - Baselines,test,Item-based kNN,ratings minus each user's mean; sum over the item's k neighbours,adjusted cosine,50,0.178,0.0778,0.1985,0.1414,none (deterministic); bootstrap seed 0,,0.0,0.0,0.0
+Part 1 - Baselines,test,Item-based kNN,raw ratings; sum over the item's k neighbours,cosine,20,0.1512,0.0638,0.1683,0.1942,none (deterministic); bootstrap seed 0,,-0.0303,-0.0423,-0.0186
+Part 1 - Baselines,test,Item-based kNN,raw ratings; sum over the item's k neighbours,cosine,30,0.1532,0.0641,0.173,0.1948,none (deterministic); bootstrap seed 0,,-0.0255,-0.0374,-0.0131
+Part 1 - Baselines,test,Item-based kNN,raw ratings; sum over the item's k neighbours,cosine,50,0.1548,0.0635,0.1743,0.1874,none (deterministic); bootstrap seed 0,,-0.0242,-0.0364,-0.012
+Part 1 - Baselines,test,Most popular,"all-time, all ratings",-,-,0.1529,0.0566,0.1689,0.0446,none (deterministic); bootstrap seed 0,,-0.0296,-0.0422,-0.0171
+Part 1 - Baselines,test,Most popular,"all-time, ratings >= 4",-,-,0.1591,0.0612,0.177,0.044,none (deterministic); bootstrap seed 0,,-0.0215,-0.0337,-0.0098
+Part 1 - Baselines,test,Most popular,"7 days, all ratings",-,-,0.1036,0.0605,0.1273,0.0165,none (deterministic); bootstrap seed 0,,-0.0713,-0.0882,-0.0546
+Part 1 - Baselines,test,Most popular,"7 days, ratings >= 4",-,-,0.0987,0.0467,0.1098,0.0198,none (deterministic); bootstrap seed 0,,-0.0887,-0.104,-0.0734
+Part 1 - Baselines,test,Most popular,"14 days, all ratings",-,-,0.1041,0.0602,0.133,0.021,none (deterministic); bootstrap seed 0,,-0.0656,-0.0829,-0.048
+Part 1 - Baselines,test,Most popular,"14 days, ratings >= 4",-,-,0.1169,0.0616,0.145,0.0213,none (deterministic); bootstrap seed 0,chosen on validation,-0.0535,-0.0702,-0.0369
+Part 1 - Baselines,test,Most popular,"30 days, all ratings",-,-,0.1084,0.0745,0.14,0.0183,none (deterministic); bootstrap seed 0,,-0.0585,-0.0772,-0.0395
+Part 1 - Baselines,test,Most popular,"30 days, ratings >= 4",-,-,0.1216,0.0696,0.1588,0.0233,none (deterministic); bootstrap seed 0,,-0.0398,-0.0578,-0.0216
+Part 1 - Baselines,test,Most popular,"60 days, all ratings",-,-,0.1009,0.072,0.1425,0.0139,none (deterministic); bootstrap seed 0,,-0.056,-0.0761,-0.0363
+Part 1 - Baselines,test,Most popular,"60 days, ratings >= 4",-,-,0.118,0.0774,0.1596,0.0204,none (deterministic); bootstrap seed 0,,-0.039,-0.0582,-0.0195
