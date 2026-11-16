@@ -15,7 +15,7 @@ from recsys.split import (temporal_split, fit_and_target,
                           evaluated_users, kept_items)
 
 def recommend(fit: pd.DataFrame, items: pd.Index, users: pd.Index,
-              k: int = 50, n: int = 10) -> pd.DataFrame: 
+              k: int = 50, n: int = 10, similarity: str = "adjusted_cosine") -> pd.DataFrame:
 
     data = fit[fit["item_id"].isin(items)].drop(["timestamp"], axis=1) # only items from the items-list are selected
 
@@ -24,6 +24,8 @@ def recommend(fit: pd.DataFrame, items: pd.Index, users: pd.Index,
     user_means = pivot.mean(axis=0) # rating means by user
 
     pivot_centered = pivot.subtract(user_means, axis=1).fillna(0) # mean centering by user and setting NaN to 0
+    if similarity == "cosine":
+        pivot_centered = pivot.fillna(0) # plain cosine: raw ratings, no mean centering
 
     rated = pivot.notna().to_numpy().T   # (users x movies), True = user has already rated  
 
