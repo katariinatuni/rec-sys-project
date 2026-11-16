@@ -19,8 +19,11 @@ from recsys.metrics import evaluate, per_user_metrics
 from recsys.popular import popular, WINDOWS_DAYS
 from recsys.split import (temporal_split, fit_and_target, evaluated_users, kept_items,
                           RELEVANT_MIN_RATING)
+from recsys.knn_user import recommend as recommend_user, pearson_similarity
 
 KNN_K = [20, 30, 50]  # neighbourhood sizes compared on validation
+USER_KNN_K = [20, 30, 50]  # the same neighbourhood sizes also for used-based kNN validation
+USER_KNN_GAMMA = [1, 25, 50]  # significance weighting thresholds compared on validation (value 1 means to no significance weighting is applied)
 
 def bootstrap_diff(a: np.ndarray, b: np.ndarray, resamples: int = 5000,
                    seed: int = 0) -> tuple[float, float, float]:
@@ -52,6 +55,11 @@ def main() -> None:
     # Every variant: (model, setting, counting, recommendations).
     variants = [("Item kNN", f"k = {k}", "star ratings", recommend(fit, items, users, k=k))
                 for k in KNN_K]
+    pearson = pearson_similarity(fit, items)  # slow, so computed once and shared by all user kNN variants
+    for gamma in USER_KNN_GAMMA:
+        for k in USER_KNN_K:
+            variants.append(("User kNN", f"pearson, gamma = {gamma}, k = {k}", "star ratings",
+                             recommend_user(fit, items, users, k=k, gamma=gamma, pearson=pearson)))
     for window_days in WINDOWS_DAYS:
         for min_rating in [None, RELEVANT_MIN_RATING]:
             variants.append(("Popular",
