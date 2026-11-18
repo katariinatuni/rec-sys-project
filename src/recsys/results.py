@@ -18,11 +18,11 @@ from pathlib import Path
 
 import pandas as pd
 
-SHEET = "Part 1 - Baselines"
+SHEET = "Part 2 - Baselines and new models"
 # The template's required columns, in its order. The format is mandatory: do not rename.
 TEMPLATE_COLUMNS = ["Model", "Variant / settings", "Similarity", "k", "Precision@10",
                     "Recall@10", "NDCG@10", "Catalogue coverage", "Seed", "Notes"]
-MODEL_NAMES = {"Item kNN": "Item-based kNN", "Popular": "Most popular"}
+MODEL_NAMES = {"Item kNN": "Item-based kNN", "User kNN": "User-based kNN", "Popular": "Most popular"}
 # compare.py's similarity name -> (what the model learns from, similarity as written in the template)
 KNN_SIMILARITIES = {
     "adjusted_cosine": ("ratings minus each user's mean; sum over the item's k neighbours",
@@ -53,6 +53,12 @@ def template_rows(table: pd.DataFrame, period: str, chosen: list[tuple]) -> list
             similarity, k = r["setting"].split(", k = ")  # compare.py writes "cosine, k = 30"
             settings, similarity = KNN_SIMILARITIES[similarity]
             k = int(k)
+        elif r["model"] == "User kNN":
+            similarity, k = r["setting"].split(", k = ")  # compare.py writes "pearson, gamma = 25, k = 50"
+            gamma = int(similarity.split(", gamma = ")[1]) # Take the number after ", gamma = " from the first part: "pearson, gamma = 25" -> 25
+            weighting = "none" if gamma == 1 else f"min(n, {gamma}) / {gamma}" # gamma = 1 means no shrinking (weight min(n, 1) / 1 = 1), otherwise write out the weight formula
+            settings = ("ratings minus each user's mean; sum over the user's k neighbours; "f"significance weighting {weighting} (gamma = {gamma})")  # Description for the template's "Variant / settings" column
+            similarity, k = "Pearson", int(k) # Similarity as written in the template, and k as a number for the "k" column
         else:
             settings, similarity, k = f"{r['setting']}, {r['counting']}", "-", "-"
         rows.append({

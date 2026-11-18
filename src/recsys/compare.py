@@ -1,9 +1,10 @@
-"""Compare the Part 1 baselines on one period.
-Runs every most-popular variant and item kNN at several k, and prints one table with
-the mean metrics and each variant's NDCG difference to the best variant, with a 95%
-paired-bootstrap interval over users.
+"""Compare the baselines and user kNN on one period.
+Runs every most-popular variant, item kNN (adjusted cosine and cosine) at several k and
+user kNN (Pearson with significance weighting) at several k and gamma, and prints one
+table with the mean metrics and each variant's NDCG difference to the best variant,
+with a 95% paired-bootstrap interval over users.
 
-Run from the repository root (about 10 seconds):
+Run from the repository root (about 1-2 min):
     PYTHONPATH=src python -m recsys.compare --data-dir ../data/ml-1m
 Options: --period val|test (default val; run test only once, after the choices are fixed),
 --resamples N (default 5000) and --out-dir (default output; the table is also saved there
@@ -25,7 +26,7 @@ from recsys.knn_user import recommend as recommend_user, pearson_similarity
 
 KNN_K = [20, 30, 50]  # neighbourhood sizes compared on validation
 USER_KNN_K = [20, 30, 50]  # neighbourhood sizes compared on validation
-USER_KNN_GAMMA = [1, 25, 50]  # significance weighting thresholds compared on validation (1 means no significance weighting)
+USER_KNN_GAMMA = [1, 30]  # significance weighting thresholds compared on validation (1 means no significance weighting)
 
 def bootstrap_diff(a: np.ndarray, b: np.ndarray, resamples: int = 5000,
                    seed: int = 0) -> tuple[float, float, float]:
