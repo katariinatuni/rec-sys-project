@@ -100,6 +100,5 @@ def main() -> None:
               f" / coverage {v['Coverage']:.1%}; test NDCG@10 {t['NDCG@10']:.4f}"
               f" / coverage {t['Coverage']:.1%}")
 
-
 if __name__ == "__main__":
     main()

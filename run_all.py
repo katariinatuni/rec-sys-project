@@ -40,6 +40,7 @@ def main() -> None:
     for period in ["val", "test"]:  # validation first: the choice is made there
         run("compare", *data, *out, "--period", period)
     run("results", *out)
+    run("breakdown", *data, *out)
 
 
 if __name__ == "__main__":
