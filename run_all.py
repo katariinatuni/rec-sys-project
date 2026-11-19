@@ -41,6 +41,8 @@ def main() -> None:
         run("compare", *data, *out, "--period", period)
     run("results", *out)
     run("breakdown", *data, *out)
+    run("sparsity_ablation", *data, *out)
+    run("model_comparisons", *data, *out)
 
 
 if __name__ == "__main__":
