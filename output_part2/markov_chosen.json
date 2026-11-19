@@ -1,0 +1,7 @@
+{
+  "window": 5,
+  "history": null,
+  "decay": 1.0,
+  "pop_weight": 0.3,
+  "min_gap": 86400
+}
