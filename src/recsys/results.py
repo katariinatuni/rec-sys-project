@@ -1,4 +1,4 @@
-"""Write output/results.csv in the columns of the course results template ("Part 1 - Baselines").
+"""Write output/results.csv in the columns of the course results template ("Part 2 - Models").
 
 Reads the two tables compare.py saves (compare_val.csv and compare_test.csv), chooses one
 variant per model on validation, and writes every variant for both periods. Nothing is
@@ -10,6 +10,10 @@ difference includes zero), take the one with the highest catalogue coverage. If 
 model's variants qualifies, take its highest NDCG@10. Accuracy and coverage are reported as a
 pair (Lecture 3.1, slide 9).
 
+Variability: every model is deterministic, so there are no seeds to vary. The template's
+"Variability / CI / test" column holds the paired test across users that compare.py ran:
+the variant's NDCG@10 difference to the best variant of the period, with its 95% interval.
+
 Run from the repository root, after compare.py has run on both periods (under a second):
     PYTHONPATH=src python -m recsys.results
 """
@@ -18,16 +22,22 @@ from pathlib import Path
 
 import pandas as pd
 
-SHEET = "Part 2 - Baselines and new models"
+SHEET = "Part 2 - Models"  # the template's sheet name: do not rename
 # The template's required columns, in its order. The format is mandatory: do not rename.
-TEMPLATE_COLUMNS = ["Model", "Variant / settings", "Similarity", "k", "Precision@10",
-                    "Recall@10", "NDCG@10", "Catalogue coverage", "Seed", "Notes"]
-MODEL_NAMES = {"Item kNN": "Item-based kNN", "User kNN": "User-based kNN", "Popular": "Most popular"}
-# compare.py's similarity name -> (what the model learns from, similarity as written in the template)
+TEMPLATE_COLUMNS = ["Model", "Paradigm", "Self-implemented?", "Key hyperparameters",
+                    "Precision@10", "Recall@10", "NDCG@10", "Catalogue coverage",
+                    "Variability / CI / test", "Seed(s)", "Notes"]
+# compare.py's model name -> the name, paradigm and self-implemented label written in the template
+MODEL_NAMES = {"Item kNN": "Item-based kNN", "User kNN": "User-based kNN", "Markov": "Markov chain",
+               "Popular": "Most popular"}
+PARADIGMS = {"Item kNN": "Neighbourhood CF (item-based)", "User kNN": "Neighbourhood CF (user-based)",
+             "Markov": "Sequential (Markov chain)", "Popular": "Non-personalised"}
+SELF_IMPLEMENTED = {"Item kNN": "No (Part 1 baseline)", "User kNN": "Yes", "Markov": "Yes",
+                    "Popular": "No (Part 1 baseline)"}
+# compare.py's similarity name -> (similarity as written in the template, what the model learns from)
 KNN_SIMILARITIES = {
-    "adjusted_cosine": ("ratings minus each user's mean; sum over the item's k neighbours",
-                        "adjusted cosine"),
-    "cosine": ("raw ratings; sum over the item's k neighbours", "cosine"),
+    "adjusted_cosine": ("adjusted cosine", "ratings minus each user's mean; sum over the item's k neighbours"),
+    "cosine": ("cosine", "raw ratings; sum over the item's k neighbours"),
 }
 VARIANT = ["model", "setting", "counting"]  # together these name one variant in compare.py
 
@@ -45,29 +55,53 @@ def choose(val: pd.DataFrame) -> list[tuple]:
     return chosen
 
 
+def hyperparameters(model: str, setting: str, counting: str) -> str:
+    """One variant's settings in words, from the names compare.py gives it."""
+    if model == "Item kNN":
+        similarity, k = setting.split(", k = ")  # compare.py writes "cosine, k = 30"
+        similarity, learns_from = KNN_SIMILARITIES[similarity]
+        return f"{similarity}, k = {k}; {learns_from}"
+
+    if model == "User kNN":
+        rest, k = setting.split(", k = ")  # compare.py writes "pearson, gamma = 30, k = 50"
+        gamma = int(rest.split(", gamma = ")[1])  # "pearson, gamma = 30" -> 30
+        # gamma = 1 means no shrinking (weight min(n, 1) / 1 = 1), otherwise write out the weight formula
+        weighting = "none" if gamma == 1 else f"min(n, {gamma}) / {gamma}"
+        return (f"Pearson, k = {k}, significance weighting {weighting} (gamma = {gamma}); "
+                "ratings minus each user's mean; sum over the user's k neighbours")
+
+    if model == "Markov":
+        window, pop_weight = setting.split(", pop_weight = ")  # compare.py writes "window = 5, pop_weight = 0.3"
+        window = int(window.split("window = ")[1])  # "window = 5" -> 5
+        # The settings after the first semicolon are fixed: recommend()'s defaults, from markov_tuning.py.
+        return (f"window {window}, popularity mix {pop_weight}; pairs >= 1 day apart; "
+                "state = whole history, no decay")
+
+    return f"{setting}, {counting}"  # Popular: "14 days, ratings >= 4"
+
+
 def template_rows(table: pd.DataFrame, period: str, chosen: list[tuple]) -> list[dict]:
     """One row per variant: the template's columns, plus the period and the comparison."""
+    # The variant every difference in this period is measured against (compare.py: highest mean NDCG@10).
+    best = table.loc[table["NDCG@10"].idxmax()]
+    best_name = f"{MODEL_NAMES[best['model']]}, {best['setting']}"
+
     rows = []
     for r in table.to_dict("records"):
-        if r["model"] == "Item kNN":
-            similarity, k = r["setting"].split(", k = ")  # compare.py writes "cosine, k = 30"
-            settings, similarity = KNN_SIMILARITIES[similarity]
-            k = int(k)
-        elif r["model"] == "User kNN":
-            similarity, k = r["setting"].split(", k = ")  # compare.py writes "pearson, gamma = 25, k = 50"
-            gamma = int(similarity.split(", gamma = ")[1]) # Take the number after ", gamma = " from the first part: "pearson, gamma = 25" -> 25
-            weighting = "none" if gamma == 1 else f"min(n, {gamma}) / {gamma}" # gamma = 1 means no shrinking (weight min(n, 1) / 1 = 1), otherwise write out the weight formula
-            settings = ("ratings minus each user's mean; sum over the user's k neighbours; "f"significance weighting {weighting} (gamma = {gamma})")  # Description for the template's "Variant / settings" column
-            similarity, k = "Pearson", int(k) # Similarity as written in the template, and k as a number for the "k" column
+        if r["NDCG vs best"] == 0:
+            variability = "best NDCG@10 in this period (the reference of the paired test)"
         else:
-            settings, similarity, k = f"{r['setting']}, {r['counting']}", "-", "-"
+            variability = (f"NDCG@10 vs best in period ({best_name}): {r['NDCG vs best']:+.4f}, "
+                           f"95% CI [{r['CI low']:+.4f}, {r['CI high']:+.4f}], paired bootstrap over users")
         rows.append({
             "Sheet": SHEET, "Period": period,
-            "Model": MODEL_NAMES[r["model"]], "Variant / settings": settings,
-            "Similarity": similarity, "k": k,
+            "Model": MODEL_NAMES[r["model"]], "Paradigm": PARADIGMS[r["model"]],
+            "Self-implemented?": SELF_IMPLEMENTED[r["model"]],
+            "Key hyperparameters": hyperparameters(r["model"], r["setting"], r["counting"]),
             "Precision@10": r["Precision@10"], "Recall@10": r["Recall@10"],
             "NDCG@10": r["NDCG@10"], "Catalogue coverage": r["Coverage"],
-            "Seed": "none (deterministic); bootstrap seed 0",
+            "Variability / CI / test": variability,
+            "Seed(s)": "none (deterministic); bootstrap seed 0",
             "Notes": "chosen on validation" if tuple(r[c] for c in VARIANT) in chosen else "",
             # Extra columns (the template allows adding them after the required ones):
             "NDCG@10 vs best in period": r["NDCG vs best"],
@@ -99,6 +133,7 @@ def main() -> None:
         print(f"  {MODEL_NAMES[key[0]]:<15} {key[1]}, {key[2]}: validation NDCG@10 {v['NDCG@10']:.4f}"
               f" / coverage {v['Coverage']:.1%}; test NDCG@10 {t['NDCG@10']:.4f}"
               f" / coverage {t['Coverage']:.1%}")
+
 
 if __name__ == "__main__":
     main()
