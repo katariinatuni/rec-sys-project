@@ -32,7 +32,8 @@ MODEL_NAMES = {"Item kNN": "Item-based kNN", "User kNN": "User-based kNN", "Mark
                "Popular": "Most popular"}
 PARADIGMS = {"Item kNN": "Neighbourhood CF (item-based)", "User kNN": "Neighbourhood CF (user-based)",
              "Markov": "Sequential (Markov chain)", "Popular": "Non-personalised"}
-SELF_IMPLEMENTED = {"Item kNN": "No (Part 1 baseline)", "User kNN": "Yes", "Markov": "Yes",
+# User-based kNN is the team's self-implemented model.
+SELF_IMPLEMENTED = {"Item kNN": "No (Part 1 baseline)", "User kNN": "Yes", "Markov": "No",
                     "Popular": "No (Part 1 baseline)"}
 # compare.py's similarity name -> (similarity as written in the template, what the model learns from)
 KNN_SIMILARITIES = {
