@@ -1,4 +1,4 @@
-Model A,Model B,NDCG@10 A,NDCG@10 B,Difference (A - B),95% CI low,95% CI high,Clearly different,Users
-Item-based kNN,User-based kNN,0.1929,0.191,0.0019,-0.0098,0.0138,False,777
-Item-based kNN,Most popular,0.1929,0.145,0.0479,0.0312,0.0646,True,777
-User-based kNN,Most popular,0.191,0.145,0.046,0.0298,0.0625,True,777
+Model A;Model B;NDCG@10 A;NDCG@10 B;Difference (A - B);95% CI low;95% CI high;Clearly different;Users
+Item-based kNN;User-based kNN;0,1929;0,191;0,0019;-0,0098;0,0138;False;777
+Item-based kNN;Most popular;0,1929;0,145;0,0479;0,0312;0,0646;True;777
+User-based kNN;Most popular;0,191;0,145;0,046;0,0298;0,0625;True;777
