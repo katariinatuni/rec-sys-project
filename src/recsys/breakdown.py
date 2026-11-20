@@ -161,6 +161,18 @@ def main() -> None:
                              recs, early_target, early_users, items, args.resamples, half_note))
         rows.append(make_row(name, "Test time", "Late", time_late,
                              recs, late_target, late_users, items, args.resamples, half_note))
+        
+    # Within each model and breakdown: which group is better, and is the other one clearly worse?
+    for row in rows:
+        if row["Breakdown dimension"] == "Overall":
+            continue  # nothing to compare
+        # The rows of the same model and breakdown, e.g. Item-based kNN's Low and High.
+        pair = [other for other in rows if other["Model"] == row["Model"]
+                and other["Breakdown dimension"] == row["Breakdown dimension"]]
+        best = max(pair, key=lambda other: other["NDCG@10"])  # the group with the higher NDCG@10
+        row["Best group of the model"] = row["Group"] == best["Group"]  # True for the better group
+        # Clearly worse: this group's whole interval lies below the best group's interval.
+        row["Clearly worse than the model's best group"] = row["NDCG@10 CI high"] < best["NDCG@10 CI low"]
 
     table = pd.DataFrame(rows)
     print(table.to_string(index=False, float_format="%.4f"))

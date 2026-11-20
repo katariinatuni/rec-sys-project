@@ -1,21 +1,21 @@
-Model,Breakdown dimension,Group,Definition / threshold,Precision@10,Recall@10,NDCG@10,Catalogue coverage,Seed(s),Notes,Users,NDCG@10 CI low,NDCG@10 CI high
-Item-based kNN,Overall,All users,every evaluated user,0.1716,0.0757,0.1929,0.1502,none (deterministic); bootstrap seed 0,,777,0.178,0.2087
-Item-based kNN,User activity,Low,<= 212 fit ratings (median of evaluated users),0.1611,0.0746,0.1818,0.1319,none (deterministic); bootstrap seed 0,,393,0.1612,0.2034
-Item-based kNN,User activity,High,> 212 fit ratings,0.1823,0.0769,0.2043,0.1009,none (deterministic); bootstrap seed 0,,384,0.1833,0.2265
-Item-based kNN,Test time,Early,held-out ratings before 2002-02-03 06:42 (median timestamp),0.1158,0.0775,0.1399,0.1378,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,615,0.1251,0.1556
-Item-based kNN,Test time,Late,held-out ratings from 2002-02-03 06:42,0.123,0.0714,0.1418,0.124,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,505,0.126,0.1583
-User-based kNN,Overall,All users,every evaluated user,0.1658,0.0671,0.191,0.106,none (deterministic); bootstrap seed 0,,777,0.175,0.2074
-User-based kNN,User activity,Low,<= 212 fit ratings (median of evaluated users),0.1728,0.0718,0.2001,0.0443,none (deterministic); bootstrap seed 0,,393,0.1767,0.2244
-User-based kNN,User activity,High,> 212 fit ratings,0.1586,0.0623,0.1817,0.1018,none (deterministic); bootstrap seed 0,,384,0.1608,0.2036
-User-based kNN,Test time,Early,held-out ratings before 2002-02-03 06:42 (median timestamp),0.1125,0.0683,0.1388,0.1018,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,615,0.1238,0.1545
-User-based kNN,Test time,Late,held-out ratings from 2002-02-03 06:42,0.118,0.0635,0.1384,0.0909,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,505,0.1215,0.156
-Markov chain,Overall,All users,every evaluated user,0.1329,0.088,0.1576,0.0823,none (deterministic); bootstrap seed 0,,777,0.1449,0.1701
-Markov chain,User activity,Low,<= 212 fit ratings (median of evaluated users),0.114,0.0778,0.1363,0.0791,none (deterministic); bootstrap seed 0,,393,0.12,0.1545
-Markov chain,User activity,High,> 212 fit ratings,0.1523,0.0984,0.1795,0.0319,none (deterministic); bootstrap seed 0,,384,0.1611,0.1983
-Markov chain,Test time,Early,held-out ratings before 2002-02-03 06:42 (median timestamp),0.0979,0.1027,0.1319,0.0682,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,615,0.1179,0.1464
-Markov chain,Test time,Late,held-out ratings from 2002-02-03 06:42,0.0853,0.0726,0.1021,0.0558,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,505,0.0893,0.1145
-Most popular,Overall,All users,every evaluated user,0.1169,0.0616,0.145,0.0213,none (deterministic); bootstrap seed 0,,777,0.1326,0.1578
-Most popular,User activity,Low,<= 212 fit ratings (median of evaluated users),0.0987,0.0471,0.1151,0.0068,none (deterministic); bootstrap seed 0,,393,0.0996,0.1323
-Most popular,User activity,High,> 212 fit ratings,0.1354,0.0765,0.1756,0.0213,none (deterministic); bootstrap seed 0,,384,0.1576,0.1957
-Most popular,Test time,Early,held-out ratings before 2002-02-03 06:42 (median timestamp),0.0878,0.0771,0.1247,0.0204,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,615,0.111,0.1391
-Most popular,Test time,Late,held-out ratings from 2002-02-03 06:42,0.0729,0.0437,0.0869,0.0207,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,505,0.0754,0.0989
+Model,Breakdown dimension,Group,Definition / threshold,Precision@10,Recall@10,NDCG@10,Catalogue coverage,Seed(s),Notes,Users,NDCG@10 CI low,NDCG@10 CI high,Best group of the model,Clearly worse than the model's best group
+Item-based kNN,Overall,All users,every evaluated user,0.1716,0.0757,0.1929,0.1502,none (deterministic); bootstrap seed 0,,777,0.178,0.2087,,
+Item-based kNN,User activity,Low,<= 212 fit ratings (median of evaluated users),0.1611,0.0746,0.1818,0.1319,none (deterministic); bootstrap seed 0,,393,0.1612,0.2034,False,False
+Item-based kNN,User activity,High,> 212 fit ratings,0.1823,0.0769,0.2043,0.1009,none (deterministic); bootstrap seed 0,,384,0.1833,0.2265,True,False
+Item-based kNN,Test time,Early,held-out ratings before 2002-02-03 06:42 (median timestamp),0.1158,0.0775,0.1399,0.1378,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,615,0.1251,0.1556,False,False
+Item-based kNN,Test time,Late,held-out ratings from 2002-02-03 06:42,0.123,0.0714,0.1418,0.124,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,505,0.126,0.1583,True,False
+User-based kNN,Overall,All users,every evaluated user,0.1658,0.0671,0.191,0.106,none (deterministic); bootstrap seed 0,,777,0.175,0.2074,,
+User-based kNN,User activity,Low,<= 212 fit ratings (median of evaluated users),0.1728,0.0718,0.2001,0.0443,none (deterministic); bootstrap seed 0,,393,0.1767,0.2244,True,False
+User-based kNN,User activity,High,> 212 fit ratings,0.1586,0.0623,0.1817,0.1018,none (deterministic); bootstrap seed 0,,384,0.1608,0.2036,False,False
+User-based kNN,Test time,Early,held-out ratings before 2002-02-03 06:42 (median timestamp),0.1125,0.0683,0.1388,0.1018,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,615,0.1238,0.1545,True,False
+User-based kNN,Test time,Late,held-out ratings from 2002-02-03 06:42,0.118,0.0635,0.1384,0.0909,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,505,0.1215,0.156,False,False
+Markov chain,Overall,All users,every evaluated user,0.1329,0.088,0.1576,0.0823,none (deterministic); bootstrap seed 0,,777,0.1449,0.1701,,
+Markov chain,User activity,Low,<= 212 fit ratings (median of evaluated users),0.114,0.0778,0.1363,0.0791,none (deterministic); bootstrap seed 0,,393,0.12,0.1545,False,True
+Markov chain,User activity,High,> 212 fit ratings,0.1523,0.0984,0.1795,0.0319,none (deterministic); bootstrap seed 0,,384,0.1611,0.1983,True,False
+Markov chain,Test time,Early,held-out ratings before 2002-02-03 06:42 (median timestamp),0.0979,0.1027,0.1319,0.0682,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,615,0.1179,0.1464,True,False
+Markov chain,Test time,Late,held-out ratings from 2002-02-03 06:42,0.0853,0.0726,0.1021,0.0558,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,505,0.0893,0.1145,False,True
+Most popular,Overall,All users,every evaluated user,0.1169,0.0616,0.145,0.0213,none (deterministic); bootstrap seed 0,,777,0.1326,0.1578,,
+Most popular,User activity,Low,<= 212 fit ratings (median of evaluated users),0.0987,0.0471,0.1151,0.0068,none (deterministic); bootstrap seed 0,,393,0.0996,0.1323,False,True
+Most popular,User activity,High,> 212 fit ratings,0.1354,0.0765,0.1756,0.0213,none (deterministic); bootstrap seed 0,,384,0.1576,0.1957,True,False
+Most popular,Test time,Early,held-out ratings before 2002-02-03 06:42 (median timestamp),0.0878,0.0771,0.1247,0.0204,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,615,0.111,0.1391,True,False
+Most popular,Test time,Late,held-out ratings from 2002-02-03 06:42,0.0729,0.0437,0.0869,0.0207,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,505,0.0754,0.0989,False,True
