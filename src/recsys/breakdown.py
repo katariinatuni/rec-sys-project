@@ -21,6 +21,7 @@ import pandas as pd
 from recsys.data import load_ratings
 from recsys.knn import recommend
 from recsys.knn_user import recommend as recommend_user
+from recsys.markov import recommend as recommend_markov
 from recsys.metrics import per_user_metrics, catalogue_coverage, ranked_lists
 from recsys.popular import popular
 from recsys.results import choose, MODEL_NAMES
@@ -40,6 +41,12 @@ def run_variant(model, setting, counting, fit, items, users):
         rest, k = setting.split(", k = ")
         gamma = rest.split(", gamma = ")[1]
         return recommend_user(fit, items, users, k=int(k), gamma=int(gamma))
+
+    if model == "Markov":
+        # setting is like "window = 5, pop_weight = 0.3"; the other settings are recommend()'s defaults
+        window, pop_weight = setting.split(", pop_weight = ")
+        window = window.split("window = ")[1]
+        return recommend_markov(fit, items, users, window=int(window), pop_weight=float(pop_weight))
 
     # Popular: setting is like "14 days" or "all-time", counting like "ratings >= 4" or "all ratings"
     if setting == "all-time":

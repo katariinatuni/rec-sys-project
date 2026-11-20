@@ -1,8 +1,9 @@
-"""Compare the baselines and user kNN on one period.
-Runs every most-popular variant, item kNN (adjusted cosine and cosine) at several k and
-user kNN (Pearson with significance weighting) at several k and gamma, and prints one
-table with the mean metrics and each variant's NDCG difference to the best variant,
-with a 95% paired-bootstrap interval over users.
+"""Compare the baselines, user kNN and the Markov chain on one period.
+Runs every most-popular variant, item kNN (adjusted cosine and cosine) at several k,
+user kNN (Pearson with significance weighting) at several k and gamma and the Markov
+chain at several windows and popularity weights, and prints one table with the mean
+metrics and each variant's NDCG difference to the best variant, with a 95%
+paired-bootstrap interval over users.
 
 Run from the repository root (about 1-2 min):
     PYTHONPATH=src python -m recsys.compare --data-dir ../data/ml-1m
@@ -23,10 +24,15 @@ from recsys.popular import popular, WINDOWS_DAYS
 from recsys.split import (temporal_split, fit_and_target, evaluated_users, kept_items,
                           RELEVANT_MIN_RATING)
 from recsys.knn_user import recommend as recommend_user, pearson_similarity
+from recsys.markov import recommend as recommend_markov
 
 KNN_K = [20, 30, 50]  # neighbourhood sizes compared on validation
 USER_KNN_K = [20, 30, 50]  # neighbourhood sizes compared on validation
 USER_KNN_GAMMA = [1, 30]  # significance weighting thresholds compared on validation (1 means no significance weighting)
+# Markov chain: the two settings that still matter after the 84-setting search in markov_tuning.py.
+# The others stay at recommend()'s defaults, which that search fixed (whole history, no decay, pairs >= 1 day apart).
+MARKOV_WINDOW = [1, 5, 20]  # how many positions ahead a pair a -> b may be (1 = the classic first-order chain)
+MARKOV_POP_WEIGHT = [0.0, 0.3]  # share of popularity mixed into the scores (0.0 = transitions only)
 
 def bootstrap_diff(a: np.ndarray, b: np.ndarray, resamples: int = 5000,
                    seed: int = 0) -> tuple[float, float, float]:
@@ -63,6 +69,10 @@ def main() -> None:
     for gamma in USER_KNN_GAMMA:
         for k in USER_KNN_K:
             variants.append(("User kNN", f"pearson, gamma = {gamma}, k = {k}", "star ratings", recommend_user(fit, items, users, k=k, gamma=gamma, pearson=pearson)))
+    for window in MARKOV_WINDOW:
+        for pop_weight in MARKOV_POP_WEIGHT:
+            variants.append(("Markov", f"window = {window}, pop_weight = {pop_weight}", "rating order",
+                             recommend_markov(fit, items, users, window=window, pop_weight=pop_weight)))
     for window_days in WINDOWS_DAYS:
         for min_rating in [None, RELEVANT_MIN_RATING]:
             variants.append(("Popular",

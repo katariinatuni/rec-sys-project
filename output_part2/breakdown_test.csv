@@ -9,6 +9,11 @@ User-based kNN,User activity,Low,<= 212 fit ratings (median of evaluated users),
 User-based kNN,User activity,High,> 212 fit ratings,0.1586,0.0623,0.1817,0.1018,none (deterministic); bootstrap seed 0,,384,0.1608,0.2036
 User-based kNN,Test time,Early,held-out ratings before 2002-02-03 06:42 (median timestamp),0.1125,0.0683,0.1388,0.1018,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,615,0.1238,0.1545
 User-based kNN,Test time,Late,held-out ratings from 2002-02-03 06:42,0.118,0.0635,0.1384,0.0909,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,505,0.1215,0.156
+Markov chain,Overall,All users,every evaluated user,0.1329,0.088,0.1576,0.0823,none (deterministic); bootstrap seed 0,,777,0.1449,0.1701
+Markov chain,User activity,Low,<= 212 fit ratings (median of evaluated users),0.114,0.0778,0.1363,0.0791,none (deterministic); bootstrap seed 0,,393,0.12,0.1545
+Markov chain,User activity,High,> 212 fit ratings,0.1523,0.0984,0.1795,0.0319,none (deterministic); bootstrap seed 0,,384,0.1611,0.1983
+Markov chain,Test time,Early,held-out ratings before 2002-02-03 06:42 (median timestamp),0.0979,0.1027,0.1319,0.0682,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,615,0.1179,0.1464
+Markov chain,Test time,Late,held-out ratings from 2002-02-03 06:42,0.0853,0.0726,0.1021,0.0558,none (deterministic); bootstrap seed 0,scored on the relevant held-out ratings in this half only,505,0.0893,0.1145
 Most popular,Overall,All users,every evaluated user,0.1169,0.0616,0.145,0.0213,none (deterministic); bootstrap seed 0,,777,0.1326,0.1578
 Most popular,User activity,Low,<= 212 fit ratings (median of evaluated users),0.0987,0.0471,0.1151,0.0068,none (deterministic); bootstrap seed 0,,393,0.0996,0.1323
 Most popular,User activity,High,> 212 fit ratings,0.1354,0.0765,0.1756,0.0213,none (deterministic); bootstrap seed 0,,384,0.1576,0.1957
