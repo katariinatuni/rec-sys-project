@@ -1,13 +1,13 @@
-Model,Training interactions (%),Precision@10,Recall@10,NDCG@10,Catalogue coverage,Seed(s)
-Item-based kNN,100,0.1716,0.0757,0.1929,0.1502,0
-User-based kNN,100,0.1658,0.0671,0.191,0.106,0
-Markov chain,100,0.1329,0.088,0.1576,0.0823,0
-Most popular,100,0.1169,0.0616,0.145,0.0213,0
-Item-based kNN,50,0.0813,0.0349,0.0851,0.2074,"0, 1, 2"
-User-based kNN,50,0.0927,0.0387,0.0986,0.0517,"0, 1, 2"
-Markov chain,50,0.0864,0.051,0.0966,0.1349,"0, 1, 2"
-Most popular,50,0.08,0.0406,0.1007,0.0074,"0, 1, 2"
-Item-based kNN,20,0.0201,0.0077,0.0211,0.4669,"0, 1, 2"
-User-based kNN,20,0.0638,0.0262,0.0696,0.097,"0, 1, 2"
-Markov chain,20,0.0585,0.0266,0.0636,0.2683,"0, 1, 2"
-Most popular,20,0.0617,0.0267,0.0725,0.0046,"0, 1, 2"
+Model,Training interactions (%),Precision@10,Recall@10,NDCG@10,Catalogue coverage,Seed(s),Best model at this fraction,NDCG@10 vs best model,CI low,CI high,Clearly worse than the best model
+Item-based kNN,100,0.1716,0.0757,0.1929,0.1502,0,True,0.0,0.0,0.0,False
+User-based kNN,100,0.1658,0.0671,0.191,0.106,0,False,-0.0019,-0.0138,0.0098,False
+Markov chain,100,0.1329,0.088,0.1576,0.0823,0,False,-0.0353,-0.0527,-0.0175,True
+Most popular,100,0.1169,0.0616,0.145,0.0213,0,False,-0.0479,-0.0646,-0.0312,True
+Item-based kNN,50,0.0813,0.0349,0.0851,0.2074,"0, 1, 2",False,-0.0155,-0.0264,-0.0046,True
+User-based kNN,50,0.0927,0.0386,0.0987,0.0517,"0, 1, 2",False,-0.002,-0.0131,0.0089,False
+Markov chain,50,0.0864,0.051,0.0966,0.1349,"0, 1, 2",False,-0.0041,-0.0128,0.0044,False
+Most popular,50,0.08,0.0406,0.1007,0.0074,"0, 1, 2",True,0.0,0.0,0.0,False
+Item-based kNN,20,0.0201,0.0077,0.0211,0.4669,"0, 1, 2",False,-0.0515,-0.0576,-0.0456,True
+User-based kNN,20,0.0638,0.0262,0.0695,0.097,"0, 1, 2",False,-0.003,-0.0094,0.0034,False
+Markov chain,20,0.0585,0.0266,0.0636,0.2683,"0, 1, 2",False,-0.0089,-0.0152,-0.0026,True
+Most popular,20,0.0617,0.0267,0.0725,0.0046,"0, 1, 2",True,0.0,0.0,0.0,False
