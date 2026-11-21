@@ -50,7 +50,7 @@ def run_variant(model, setting, counting, fit, items, users):
         return recommend_markov(fit, items, users, window=int(window), pop_weight=float(pop_weight))
 
     if model == "Hybrid":
-        alpha = float(setting.split("alpha = "))
+        alpha = float(setting.split("alpha = ")[1])
         return recommend_hybrid(fit, items, users, alpha=alpha)
 
 
