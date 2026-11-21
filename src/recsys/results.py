@@ -29,11 +29,11 @@ TEMPLATE_COLUMNS = ["Model", "Paradigm", "Self-implemented?", "Key hyperparamete
                     "Variability / CI / test", "Seed(s)", "Notes"]
 # compare.py's model name -> the name, paradigm and self-implemented label written in the template
 MODEL_NAMES = {"Item kNN": "Item-based kNN", "User kNN": "User-based kNN", "Markov": "Markov chain",
-               "Popular": "Most popular"}
+               "Hybrid": "Weighted hybrid", "Popular": "Most popular"}
 PARADIGMS = {"Item kNN": "Neighbourhood CF (item-based)", "User kNN": "Neighbourhood CF (user-based)",
-             "Markov": "Sequential (Markov chain)", "Popular": "Non-personalised"}
+             "Markov": "Sequential (Markov chain)", "Hybrid": "Hybrid (Weighted: User kNN + Markov)", "Popular": "Non-personalised"}
 # User-based kNN is the team's self-implemented model.
-SELF_IMPLEMENTED = {"Item kNN": "No (Part 1 baseline)", "User kNN": "Yes", "Markov": "No",
+SELF_IMPLEMENTED = {"Item kNN": "No (Part 1 baseline)", "User kNN": "Yes", "Markov": "No", "Hybrid": "No",
                     "Popular": "No (Part 1 baseline)"}
 # compare.py's similarity name -> (similarity as written in the template, what the model learns from)
 KNN_SIMILARITIES = {
@@ -77,6 +77,11 @@ def hyperparameters(model: str, setting: str, counting: str) -> str:
         # The settings after the first semicolon are fixed: recommend()'s defaults, from markov_tuning.py.
         return (f"window {window}, popularity mix {pop_weight}; pairs >= 1 day apart; "
                 "state = whole history, no decay")
+
+    if model == "Hybrid":
+        alpha = float(setting.split("alpha = ")[1])
+        return (f"weighted linear combination: {alpha:.1f} * User kNN + {1 - alpha:.1f} * Markov; "
+            "per-user min-max normalized scores")
 
     return f"{setting}, {counting}"  # Popular: "14 days, ratings >= 4"
 

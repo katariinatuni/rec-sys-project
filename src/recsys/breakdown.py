@@ -27,6 +27,7 @@ from recsys.popular import popular
 from recsys.results import choose, MODEL_NAMES
 from recsys.split import (temporal_split, fit_and_target, evaluated_users, kept_items,
                           RELEVANT_MIN_RATING)
+from recsys.hybrid import recommend as recommend_hybrid
 
 
 def run_variant(model, setting, counting, fit, items, users):
@@ -47,6 +48,11 @@ def run_variant(model, setting, counting, fit, items, users):
         window, pop_weight = setting.split(", pop_weight = ")
         window = window.split("window = ")[1]
         return recommend_markov(fit, items, users, window=int(window), pop_weight=float(pop_weight))
+
+    if model == "Hybrid":
+        alpha = float(setting.split("alpha = "))
+        return recommend_hybrid(fit, items, users, alpha=alpha)
+
 
     # Popular: setting is like "14 days" or "all-time", counting like "ratings >= 4" or "all ratings"
     if setting == "all-time":
