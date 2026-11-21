@@ -1,13 +1,16 @@
 Model,Training interactions (%),Precision@10,Recall@10,NDCG@10,Catalogue coverage,Seed(s),Best model at this fraction,NDCG@10 vs best model,CI low,CI high,Clearly worse than the best model
 Item-based kNN,100,0.1716,0.0757,0.1929,0.1502,0,True,0.0,0.0,0.0,False
 User-based kNN,100,0.1658,0.0671,0.191,0.106,0,False,-0.0019,-0.0138,0.0098,False
-Markov chain,100,0.1329,0.088,0.1576,0.0823,0,False,-0.0353,-0.0527,-0.0175,True
+Markov chain,100,0.1396,0.087,0.1608,0.0419,0,False,-0.0321,-0.049,-0.0143,True
+Weighted hybrid,100,0.1672,0.0965,0.1881,0.0714,0,False,-0.0048,-0.0195,0.0104,False
 Most popular,100,0.1169,0.0616,0.145,0.0213,0,False,-0.0479,-0.0646,-0.0312,True
-Item-based kNN,50,0.0813,0.0349,0.0851,0.2074,"0, 1, 2",False,-0.0155,-0.0264,-0.0046,True
-User-based kNN,50,0.0927,0.0386,0.0987,0.0517,"0, 1, 2",False,-0.002,-0.0131,0.0089,False
-Markov chain,50,0.0864,0.051,0.0966,0.1349,"0, 1, 2",False,-0.0041,-0.0128,0.0044,False
-Most popular,50,0.08,0.0406,0.1007,0.0074,"0, 1, 2",True,0.0,0.0,0.0,False
-Item-based kNN,20,0.0201,0.0077,0.0211,0.4669,"0, 1, 2",False,-0.0515,-0.0576,-0.0456,True
-User-based kNN,20,0.0638,0.0262,0.0695,0.097,"0, 1, 2",False,-0.003,-0.0094,0.0034,False
-Markov chain,20,0.0585,0.0266,0.0636,0.2683,"0, 1, 2",False,-0.0089,-0.0152,-0.0026,True
-Most popular,20,0.0617,0.0267,0.0725,0.0046,"0, 1, 2",True,0.0,0.0,0.0,False
+Item-based kNN,50,0.0813,0.0349,0.0851,0.2074,"0, 1, 2",False,-0.0205,-0.0319,-0.0095,True
+User-based kNN,50,0.0927,0.0386,0.0987,0.0517,"0, 1, 2",False,-0.0069,-0.0186,0.0044,False
+Markov chain,50,0.0935,0.0555,0.1056,0.0804,"0, 1, 2",True,0.0,0.0,0.0,False
+Weighted hybrid,50,0.0939,0.0484,0.1014,0.1038,"0, 1, 2",False,-0.0042,-0.0098,0.0013,False
+Most popular,50,0.08,0.0406,0.1007,0.0074,"0, 1, 2",False,-0.005,-0.0139,0.0038,False
+Item-based kNN,20,0.0201,0.0077,0.0211,0.4669,"0, 1, 2",False,-0.0519,-0.0588,-0.0453,True
+User-based kNN,20,0.0638,0.0262,0.0695,0.097,"0, 1, 2",False,-0.0035,-0.0114,0.0041,False
+Markov chain,20,0.064,0.0347,0.073,0.2205,"0, 1, 2",True,0.0,0.0,0.0,False
+Weighted hybrid,20,0.0607,0.0274,0.0651,0.2237,"0, 1, 2",False,-0.0079,-0.0131,-0.0027,True
+Most popular,20,0.0617,0.0267,0.0725,0.0046,"0, 1, 2",False,-0.0004,-0.0073,0.006,False

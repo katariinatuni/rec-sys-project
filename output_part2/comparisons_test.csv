@@ -1,7 +1,11 @@
 Model A,Model B,NDCG@10 A,NDCG@10 B,Difference (A - B),95% CI low,95% CI high,Clearly different,Users
 Item-based kNN,User-based kNN,0.1929,0.191,0.0019,-0.0098,0.0138,False,777
-Item-based kNN,Markov chain,0.1929,0.1576,0.0353,0.0175,0.0527,True,777
+Item-based kNN,Markov chain,0.1929,0.1608,0.0321,0.0143,0.049,True,777
+Item-based kNN,Weighted hybrid,0.1929,0.1881,0.0048,-0.0104,0.0195,False,777
 Item-based kNN,Most popular,0.1929,0.145,0.0479,0.0312,0.0646,True,777
-User-based kNN,Markov chain,0.191,0.1576,0.0334,0.0163,0.0508,True,777
+User-based kNN,Markov chain,0.191,0.1608,0.0302,0.0133,0.0468,True,777
+User-based kNN,Weighted hybrid,0.191,0.1881,0.0029,-0.0103,0.0158,False,777
 User-based kNN,Most popular,0.191,0.145,0.046,0.0298,0.0625,True,777
-Markov chain,Most popular,0.1576,0.145,0.0126,0.0006,0.0247,True,777
+Markov chain,Weighted hybrid,0.1608,0.1881,-0.0273,-0.0343,-0.0205,True,777
+Markov chain,Most popular,0.1608,0.145,0.0158,0.0038,0.0276,True,777
+Weighted hybrid,Most popular,0.1881,0.145,0.0431,0.0307,0.0551,True,777
