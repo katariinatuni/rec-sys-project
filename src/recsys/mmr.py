@@ -23,10 +23,10 @@ from recsys.data import load_ratings
 from recsys.hybrid import recommend as recommend_hybrid
 from recsys.metrics import evaluate, print_results
 from recsys.split import temporal_split, fit_and_target, evaluated_users, kept_items
+from recsys.new_metrics import intra_list_diversity, gini, calibration_error
 
 HYBRID_ALPHA = 0.4  # the hybrid's weight
 N_CANDIDATES = 100  # how many of the hybrid's best movies MMR may choose from
-
 
  
 def genre_vectors(data_dir) -> pd.DataFrame:
@@ -83,6 +83,10 @@ def main() -> None:
     pool = candidates(fit, items, users)  # computed once; every lambda reuses it
     recs = mmr_rerank(pool, genres, lam=args.lam)
     print_results(f"Hybrid + MMR (lam = {args.lam})", evaluate(recs, target, users, items, k=10))
+
+    print("ILD", intra_list_diversity(recs, genres))
+    print("Gini", gini(recs, items))
+    print("Calibration error", calibration_error(recs, fit, genres))
 
 
 if __name__ == "__main__":
