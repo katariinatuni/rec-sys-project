@@ -1,14 +1,24 @@
-"""Reproduce every Part 1 number, table and figure with one command.
+"""Reproduce every Part 1-3 number, table and figure with one command.
 
-    python run_all.py --data-dir ../data/ml-1m
+    python run_all.py --data-dir ../data/ml-1m --out-dir output_part3
 
 Runs these steps in order (each one also runs on its own, see the README):
-  1. recsys.explore      data characterization -> data_stats.json, figures/
-  2. recsys.split_stats  temporal split and thresholds -> split_stats.json, report_tables.*
-  3. recsys.compare      baselines on validation, then on test -> compare_val.csv, compare_test.csv
-  4. recsys.results      choice on validation -> results.csv (results template columns)
-All outputs go to --out-dir (default: output/ in this repository). Takes about a minute.
-Everything is deterministic; the only random seed is the bootstrap's (0, in compare.py).
+  Part 1
+  1. recsys.explore           data characterization -> data_stats.json, figures/
+  2. recsys.split_stats       temporal split and thresholds -> split_stats.json, report_tables.*
+  Part 2
+  3. recsys.compare           every model variant on validation, then on test -> compare_*.csv
+  4. recsys.results           choice on validation -> results.csv ("Part 2 - Models" columns)
+  5. recsys.breakdown         chosen models by user activity and test time -> breakdown_test.csv
+  6. recsys.sparsity_ablation chosen models on 100 / 50 / 20 % of the fit ratings -> ablation_test.csv
+  7. recsys.model_comparisons every pair of chosen models -> comparisons_test.csv
+  Part 3 (Track A: diversity)
+  8. recsys.mmr_sweep         MMR lambda sweep, choice on validation, test -> mmr_sweep_*.csv,
+                              mmr_chosen.json, part3A_diversity_rows.csv, figures/mmr_frontier.png
+  9. recsys.who_pays          who pays for the chosen lambda, on test -> who_pays_*.csv
+All outputs go to --out-dir (default: output/ in this repository). Takes about 13 minutes.
+The models are deterministic. The random steps are the bootstraps (seed 0) and the subsampling
+in sparsity_ablation.py (seeds 0, 1 and 2).
 """
 import argparse
 import os
@@ -43,6 +53,8 @@ def main() -> None:
     run("breakdown", *data, *out)
     run("sparsity_ablation", *data, *out)
     run("model_comparisons", *data, *out)
+    run("mmr_sweep", *data, *out)  # chooses lambda on validation, writes mmr_chosen.json
+    run("who_pays", *data, *out)   # reads mmr_chosen.json, so it must run after mmr_sweep
 
 
 if __name__ == "__main__":

@@ -3,13 +3,13 @@
 1. The hybrid gives every user a candidate list of its 100 best movies, with scores that are
    min-max normalised per user (between 0 and 1).
 2. MMR builds the final top-10 one movie at a time. At each step it picks the candidate that
-   maximises
-       lamba * relevance - (1 - lambda) * (highest similarity to the movies already picked),
+   maximises lambda * relevance - (1 - lambda) * (highest similarity to the movies already picked),
    where relevance is the hybrid's score and similarity is the cosine of the genre vectors.
    lambda = 1 keeps the hybrid's own top-10, and smaller lambda values lead to more varied lists.
 
-Run from the repository root:
-    PYTHONPATH=src python -m recsys.rerank --data-dir ../data/ml-1m --lam 0.5
+Run from the repository root (one lambda on one period; prints the metrics):
+    PYTHONPATH=src python -m recsys.mmr --data-dir ../data/ml-1m --lam 0.5 --period val
+The full lambda sweep and its outputs are in mmr_sweep.py.
 """
 
 import argparse
